@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "cart-redis.fullname" . }}-test-connection"
+  labels:
+    {{- include "cart-redis.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "cart-redis.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
